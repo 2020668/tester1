@@ -31,3 +31,9 @@ class AreaInfo(models.Model):
     area_name.admin_order_field = 'areaName'    # 排序
     area_name.short_description = '地区名称'    # 标题
 
+    def show_parent(self):
+        if self.parent is None:
+            return ''
+        return self.parent.areaName
+    show_parent.short_description = '父级地区'
+
