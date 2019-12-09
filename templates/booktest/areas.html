@@ -14,14 +14,21 @@
                 // 获取province下拉列表框
                 province = $('#province')
                 // 遍历res数组　获取每一个元素　id areaName
-                for (i=0; i<res.length; i++){
+                /*for (i=0; i<res.length; i++){
                     id = res[i][0]
                     areaName = res[i][1]
 
                     option_str = '<option value="'+ id +'">'+ areaName + '</option>'
                     // 向province下拉列表框中追加元素
                     province.append(option_str)
-                }
+                }*/
+                $.each(res, function (index, item) {
+                    id = item[0]
+                    areaName = item[1]
+                    option_str = '<option value="'+ id +'">'+ areaName + '</option>'
+                    // 向province下拉列表框中追加元素
+                    province.append(option_str)
+                })
             })
         })
     </script>
