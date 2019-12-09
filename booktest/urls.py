@@ -17,4 +17,9 @@ urlpatterns = [
     url('^show_kwargs/(?P<c>\d+)/(?P<d>\d+)$', views.show_kwargs, name='show_kwargs'),
     url('^test_redirect$', views.test_redirect),
     url('^test_static$', views.test_static),
+    url('^show_upload$', views.show_upload),
+    url('^upload_handle$', views.upload_handle),
+    url('^show_area/page=(?P<pindex>\d*)$', views.show_area),
+    url('^areas$', views.areas),
+    url('^province$', views.province),
 ]

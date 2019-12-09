@@ -1,11 +1,15 @@
 from django.shortcuts import render, redirect
+from django.conf import settings
+from django.db.models import F
+from django.core.paginator import Paginator
 from django.template import loader, RequestContext
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from PIL import Image, ImageDraw, ImageFont
 from django.utils.six import BytesIO
 from django.urls import reverse
 import random
 from booktest.models import BookInfo
+from booktest.models import PicTest, AreaInfo
 
 # Create your views here.
 
@@ -199,3 +203,61 @@ def test_redirect(request):
 
 def test_static(request):
     return render(request, 'booktest/test_static.html')
+
+
+# 显示上传图片页面
+def show_upload(request):
+    return render(request, 'booktest/upload_pic.html')
+
+
+# 上传图片处理
+def upload_handle(request):
+    # 获取上传文件的处理对象
+    pic = request.FILES['pic']      # pic.name 可获取图片的名字　pic_chunks()返回一个生成器　每次返回一块内容　可遍历读取
+    print(type(pic))
+    # 创建一个文件
+    save_path = '%s/booktest/%s' % (settings.MEDIA_ROOT, pic.name)
+    with open(save_path, 'wb') as f:
+        # 获取上传文件的内容病写到创建的文件中
+        for content in pic.chunks():
+            f.write(content)
+    # 向数据库中保持上传记录
+    PicTest.objects.create(goods_pic='booktest/%s' % pic.name)
+
+    # 返回
+    return HttpResponse('ok')
+
+
+# 前端访问需传递页码
+def show_area(request, pindex):
+    # 查询出所有省级地区的信息
+    areas = AreaInfo.objects.filter(id=F('parent_id'))
+    # 分页 每页显示１０条数据
+    paginator = Paginator(areas, 10)
+    # 获取第１页的对象 page是Page类的实例对象
+    # 获取pindex页的内容
+    if pindex == '':
+        pindex = 1
+    else:
+        pindex = int(pindex)
+    page = paginator.page(pindex)
+
+    # 使用模板
+    return render(request, 'booktest/show_area.html', {'page': page})
+
+
+def areas(request):
+    return render(request, 'booktest/areas.html')
+
+
+# 获取所有省级的地区
+def province(request):
+    # 查询出所有省级地区的信息
+    areas = AreaInfo.objects.filter(id=F('parent_id'))
+    # 遍历areas 拼接出json数据　地区名称　id areaName
+    areas_list = []
+    for area in areas:
+        areas_list.append((area.id, area.areaName))
+    # 返回数据
+    return JsonResponse({'data': areas_list})
+

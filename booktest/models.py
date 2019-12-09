@@ -37,3 +37,8 @@ class AreaInfo(models.Model):
         return self.parent.areaName
     show_parent.short_description = '父级地区'
 
+
+# 上传图片
+class PicTest(models.Model):
+    goods_pic = models.ImageField(upload_to='booktest')   # 相对与media下的哪个目录
+
