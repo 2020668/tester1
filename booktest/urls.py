@@ -20,6 +20,7 @@ urlpatterns = [
     url('^show_upload$', views.show_upload),
     url('^upload_handle$', views.upload_handle),
     url('^show_area/page=(?P<pindex>\d*)$', views.show_area),
+    url('^city/province_id=(\d+)$', views.city),
     url('^areas$', views.areas),
     url('^province$', views.province),
 ]

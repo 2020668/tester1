@@ -261,3 +261,16 @@ def province(request):
     # 返回数据
     return JsonResponse({'data': areas_list})
 
+
+def city(request, pid):
+    # 获取pid下级地区的信息
+    # area = AreaInfo.objects.get(id=pid)
+    # areas = area.areainfo_set.all()
+    areas = AreaInfo.objects.filter(parent_id=pid)
+    # 遍历areas 拼接出json数据　地区名称　id areaName
+    areas_list = []
+    for area in areas:
+        areas_list.append((area.id, area.areaName))
+    # 返回数据
+    return JsonResponse({'data': areas_list})
+

@@ -30,6 +30,28 @@
                     province.append(option_str)
                 })
             })
+            // 绑定province下拉列表框的change时间事件　获取省下面的市的信息
+            $('#province').change(function () {
+                // 发起一个ajax请求　/city 获取省下面的市的信息
+                // 获取点击省的id
+                province_id=$(this).val()
+                $.get('city/province_id='+province_id, function (data) {
+                    // 获取返回的json数据
+                    res = data.data
+                    // 获取city下拉列表框
+                    city = $('#city').append('<option>---请选择市---</option>')
+                    // 清空下拉列表框
+                    city.empty().append('<option>---请选择市---</option>')
+                    // 遍历取值添加到city下拉列表框
+                    $.each(res, function (index, item) {
+                        id = item[0]
+                        areaName = item[1]
+                        option_str = '<option value="'+ id +'">'+ areaName + '</option>'
+                        // 向province下拉列表框中追加元素
+                        city.append(option_str)
+                    })
+                })
+            })
         })
     </script>
 </head>
