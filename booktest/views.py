@@ -274,3 +274,4 @@ def city(request, pid):
     # 返回数据
     return JsonResponse({'data': areas_list})
 
+

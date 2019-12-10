@@ -47,8 +47,30 @@
                         id = item[0]
                         areaName = item[1]
                         option_str = '<option value="'+ id +'">'+ areaName + '</option>'
-                        // 向province下拉列表框中追加元素
+                        // 向city下拉列表框中追加元素
                         city.append(option_str)
+                    })
+                })
+            })
+            // 绑定city下拉列表框的change时间事件　获取市下面的区的信息
+            $('#city').change(function () {
+                // 发起一个ajax请求　/district 获取市下面的区的信息
+                // 获取点击市的id
+                city_id=$(this).val()
+                $.get('district/city_id='+city_id, function (data) {
+                    // 获取返回的json数据
+                    res = data.data
+                    // 获取city下拉列表框
+                    district = $('#district').append('<option>---请选择区---</option>')
+                    // 清空下拉列表框
+                    district.empty().append('<option>---请选择区---</option>')
+                    // 遍历取值添加到city下拉列表框
+                    $.each(res, function (index, item) {
+                        id = item[0]
+                        areaName = item[1]
+                        option_str = '<option value="'+ id +'">'+ areaName + '</option>'
+                        // 向district下拉列表框中追加元素
+                        district.append(option_str)
                     })
                 })
             })
@@ -62,9 +84,8 @@
 <select id="city">
     <option>---请选择市---</option>
 </select>
-<select id="province">
+<select id="district">
     <option>---请选择区---</option>
 </select>
-
 </body>
 </html>
